@@ -1,0 +1,7 @@
+fastapi
+pydantic
+pandas
+joblib
+nest-asyncio
+uvicorn
+scikit-learn  # Since RandomForest is used, which is part of scikit-learn
