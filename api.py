@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
 import joblib
@@ -11,6 +12,15 @@ model = joblib.load('random_forest_model.pkl')  # Make sure to save your trained
 
 # Define the FastAPI app
 app = FastAPI()
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Mappings for encoded columns
 mappings = {
@@ -87,7 +97,6 @@ async def predict(input_data: ModelInput):
 
     return {"prediction": prediction[0]}
 
-
 # Endpoint to get the mappings
 @app.get("/mappings/")
 async def get_mappings():
@@ -98,4 +107,4 @@ nest_asyncio.apply()
 
 # Now run the FastAPI app using uvicorn within the notebook
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
